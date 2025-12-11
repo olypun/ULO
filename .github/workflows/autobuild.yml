@@ -63,7 +63,7 @@ jobs:
     permissions:
       contents: write
     name: ULO Autobuilder
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       
       - name: Cleanup and Installing Prerequisites
@@ -76,9 +76,12 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
           sudo pip3 install gdown
-          sudo pip3 install git+https://github.com/Juvenal-Yescas/mediafire-dl
-          wget https://mega.nz/linux/repo/xUbuntu_20.04/amd64/megacmd-xUbuntu_20.04_amd64.deb && sudo apt install "$PWD/megacmd-xUbuntu_20.04_amd64.deb"
-                    
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          cargo install mediafire_rs
+          megacmd_ver=$(sudo cat /etc/*ease | grep "DISTRIB_RELEASE" | awk -F "=" '{print $2}')
+          wget https://mega.nz/linux/repo/xUbuntu_${megacmd_ver}/amd64/megacmd-xUbuntu_${megacmd_ver}_amd64.deb && sudo apt install "$PWD/megacmd-xUbuntu_${megacmd_ver}_amd64.deb"
+          sudo timedatectl set-timezone "$TZ"
+          
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -109,10 +112,10 @@ jobs:
 
       - name: Download add-on kernel for s905x4
         run: |
-          sudo wget -O core/kernel/6.6.66.zip https://drive2.edikurbot.workers.dev/0:/6.6.66.zip
+          sudo wget -O core/kernel/5.4.210.zip https://drive2.edikurbot.workers.dev/0:/5.4.210.zip
           cd core/kernel
-          sudo unzip 6.6.66.zip
-          sudo rm 6.6.66.zip
+          sudo unzip 5.4.210.zip
+          sudo rm 5.4.210.zip
           cd ../..
           
       - name: Building OpenWrt
