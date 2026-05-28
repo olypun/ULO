@@ -207,7 +207,7 @@ jobs:
 
       - name: Persiapan Awal & Unduhan RootFS
         run: |
-          sudo ./ulo -y                                             
+          sudo ./ulo                                             
 
       - name: Unduh RootFS Kustom (jika dipilih)
         if: github.event.inputs.rootfs_choice == 'custom'
